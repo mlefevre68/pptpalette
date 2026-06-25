@@ -1,38 +1,44 @@
 ' =====================================================================
-'  frmPalette  -  paste ALL of this into the blank UserForm's code.
-'  (Insert > UserForm, rename it frmPalette, double-click it, paste.)
+'  frmPalette  -  paste ALL of this into the frmPalette UserForm.
 ' =====================================================================
 Option Explicit
 
-Private mCtrls As Collection                 ' keeps clsSwatch instances alive
-Private mUID As Long                         ' unique control-name counter
+Private mCtrls As Collection
+Private mUID As Long
 Public CurrentMode As String
 Private mLblFont As MSForms.Label
 Private mLblFill As MSForms.Label
 Private mLblLine As MSForms.Label
 Private mCustX As Single, mCustY As Single
+Private mStep As String
 
-Private Const SW As Single = 16              ' swatch size (pixels)
+Private Const SW As Single = 16
 Private Const GAP As Single = 2
 
 Private Sub UserForm_Initialize()
+    On Error GoTo EH
     Set mCtrls = New Collection
+    mStep = "form props"
     Me.Caption = "Colour Palette"
     Me.BackColor = RGB(245, 245, 245)
     BuildUI
     SetMode "FILL"
+    Exit Sub
+EH:
+    MsgBox "Init failed at [" & mStep & "]" & vbCrLf & _
+           "Error " & Err.Number & ": " & Err.Description, vbExclamation
 End Sub
 
 Private Sub BuildUI()
     Dim x As Single, y As Single, col As Long, baseC As Long
 
-    ' ---- mode toggles ----
+    mStep = "mode buttons"
     y = 6
     AddModeButton "FONT", "Font", 6, y, 40
     AddModeButton "FILL", "Fill", 48, y, 40
     AddModeButton "LINE", "Line", 90, y, 40
 
-    ' ---- theme colours + tints / shades ----
+    mStep = "theme swatches"
     y = 32
     Dim themeIdx As Variant
     themeIdx = Array(msoThemeColorDark1, msoThemeColorLight1, _
@@ -41,6 +47,7 @@ Private Sub BuildUI()
                      msoThemeColorAccent3, msoThemeColorAccent4, _
                      msoThemeColorAccent5, msoThemeColorAccent6)
     For col = 0 To 9
+        mStep = "theme swatch col " & col
         baseC = ColorPalette.ThemeRGB(CLng(themeIdx(col)))
         x = 6 + col * (SW + GAP)
         AddSwatch x, y, baseC
@@ -51,10 +58,10 @@ Private Sub BuildUI()
         AddSwatch x, y + 5 * (SW + GAP), ColorPalette.Darker(baseC, 0.5)
     Next col
 
-    ' ---- standard colours (PowerPoint's fixed row) ----
+    mStep = "standard colours"
     y = y + 6 * (SW + GAP) + 8
     Dim sc(0 To 9) As Long
-    sc(0) = RGB(192, 0, 0):  sc(1) = RGB(255, 0, 0):   sc(2) = RGB(255, 192, 0)
+    sc(0) = RGB(192, 0, 0): sc(1) = RGB(255, 0, 0): sc(2) = RGB(255, 192, 0)
     sc(3) = RGB(255, 255, 0): sc(4) = RGB(146, 208, 80): sc(5) = RGB(0, 176, 80)
     sc(6) = RGB(0, 176, 240): sc(7) = RGB(0, 112, 192): sc(8) = RGB(0, 32, 96)
     sc(9) = RGB(112, 48, 160)
@@ -62,11 +69,11 @@ Private Sub BuildUI()
         AddSwatch 6 + col * (SW + GAP), y, sc(col)
     Next col
 
-    ' ---- transparent / no fill ----
+    mStep = "transparent button"
     y = y + SW + 10
     AddNoneButton 6, y
 
-    ' ---- custom hex entry ----
+    mStep = "hex box"
     y = y + SW + 10
     Dim tb As MSForms.TextBox
     Set tb = Me.Controls.Add("Forms.TextBox.1", "txtHex", True)
@@ -75,15 +82,15 @@ Private Sub BuildUI()
     AddTextButton "Set", 80, y, "HEXSET"
     AddTextButton "+", 116, y, "HEXADD"
 
-    ' ---- saved custom swatches ----
+    mStep = "custom row"
     y = y + SW + 16
     BuildCustomRow 6, y
 
+    mStep = "size form"
     Me.Width = 6 + 10 * (SW + GAP) + 24
     Me.Height = y + SW + 44
 End Sub
 
-' ---------------------------------------------------------------------
 Private Function NewLabel(ByVal nm As String, ByVal l As Single, ByVal t As Single, _
                           ByVal w As Single, ByVal h As Single) As MSForms.Label
     mUID = mUID + 1
@@ -94,21 +101,24 @@ Private Function NewLabel(ByVal nm As String, ByVal l As Single, ByVal t As Sing
     Set NewLabel = lb
 End Function
 
+' --- FIXED: build on a LOCAL label, then hand it to the class last ---
 Private Sub AddSwatch(ByVal l As Single, ByVal t As Single, ByVal c As Long)
+    Dim lb As MSForms.Label
+    Set lb = NewLabel("sw", l, t, SW, SW)
+    lb.BackColor = c
     Dim sw As clsSwatch: Set sw = New clsSwatch
     sw.Kind = "COLOR": sw.ColorVal = c
-    Set sw.Lbl = NewLabel("sw", l, t, SW, SW)
-    sw.Lbl.BackColor = c
+    Set sw.Lbl = lb
     mCtrls.Add sw
 End Sub
 
 Private Sub AddModeButton(ByVal modeVal As String, ByVal cap As String, _
                           ByVal l As Single, ByVal t As Single, ByVal w As Single)
-    Dim sw As clsSwatch: Set sw = New clsSwatch
-    sw.Kind = "MODE": sw.ModeVal = modeVal
     Dim lb As MSForms.Label
     Set lb = NewLabel("mode", l, t, w, 20)
     lb.Caption = cap: lb.TextAlign = fmTextAlignCenter
+    Dim sw As clsSwatch: Set sw = New clsSwatch
+    sw.Kind = "MODE": sw.ModeVal = modeVal
     Set sw.Lbl = lb
     mCtrls.Add sw
     Select Case modeVal
@@ -119,25 +129,25 @@ Private Sub AddModeButton(ByVal modeVal As String, ByVal cap As String, _
 End Sub
 
 Private Sub AddNoneButton(ByVal l As Single, ByVal t As Single)
-    Dim sw As clsSwatch: Set sw = New clsSwatch
-    sw.Kind = "NONE"
     Dim lb As MSForms.Label
     Set lb = NewLabel("none", l, t, 10 * (SW + GAP) - GAP, SW)
     lb.Caption = "Transparent / No Fill / No Line"
     lb.TextAlign = fmTextAlignCenter
     lb.BackColor = RGB(255, 255, 255)
+    Dim sw As clsSwatch: Set sw = New clsSwatch
+    sw.Kind = "NONE"
     Set sw.Lbl = lb
     mCtrls.Add sw
 End Sub
 
 Private Sub AddTextButton(ByVal cap As String, ByVal l As Single, _
                           ByVal t As Single, ByVal kindVal As String)
-    Dim sw As clsSwatch: Set sw = New clsSwatch
-    sw.Kind = kindVal
     Dim lb As MSForms.Label
     Set lb = NewLabel("btn", l, t, 30, 18)
     lb.Caption = cap: lb.TextAlign = fmTextAlignCenter
     lb.BackColor = RGB(220, 220, 220)
+    Dim sw As clsSwatch: Set sw = New clsSwatch
+    sw.Kind = kindVal
     Set sw.Lbl = lb
     mCtrls.Add sw
 End Sub
@@ -159,7 +169,6 @@ Private Sub BuildCustomRow(ByVal l As Single, ByVal t As Single)
     Next i
 End Sub
 
-' ---- public callbacks used by clsSwatch ----------------------------
 Public Sub SetMode(ByVal m As String)
     ColorPalette.gMode = m
     CurrentMode = m
