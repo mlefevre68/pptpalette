@@ -1,0 +1,9 @@
+# PowerPoint / Office temp & build artefacts
+~$*
+*.ppam
+*.pptm
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
