@@ -10,16 +10,16 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Color Palette" />
   <Description DefaultValue="think-cell-style quick colour applicator: Font / Fill / Outline, transparent, and custom swatches." />
-  <IconUrl DefaultValue="https://mlefevre68.github.io/powerpoint-color-palette/assets/icon-32.png" />
-  <HighResolutionIconUrl DefaultValue="https://mlefevre68.github.io/powerpoint-color-palette/assets/icon-80.png" />
-  <SupportUrl DefaultValue="https://github.com/mlefevre68/powerpoint-color-palette" />
+  <IconUrl DefaultValue="https://mlefevre68.github.io/pptpalette/assets/icon-32.png" />
+  <HighResolutionIconUrl DefaultValue="https://mlefevre68.github.io/pptpalette/assets/icon-80.png" />
+  <SupportUrl DefaultValue="https://github.com/mlefevre68/pptpalette" />
 
   <Hosts>
     <Host Name="Presentation" />
   </Hosts>
 
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://mlefevre68.github.io/powerpoint-color-palette/index.html" />
+    <SourceLocation DefaultValue="https://mlefevre68.github.io/pptpalette/index.html" />
   </DefaultSettings>
 
   <Permissions>ReadWriteDocument</Permissions>
@@ -66,13 +66,13 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16" DefaultValue="https://mlefevre68.github.io/powerpoint-color-palette/assets/icon-16.png" />
-        <bt:Image id="Icon.32" DefaultValue="https://mlefevre68.github.io/powerpoint-color-palette/assets/icon-32.png" />
-        <bt:Image id="Icon.80" DefaultValue="https://mlefevre68.github.io/powerpoint-color-palette/assets/icon-80.png" />
+        <bt:Image id="Icon.16" DefaultValue="https://mlefevre68.github.io/pptpalette/assets/icon-16.png" />
+        <bt:Image id="Icon.32" DefaultValue="https://mlefevre68.github.io/pptpalette/assets/icon-32.png" />
+        <bt:Image id="Icon.80" DefaultValue="https://mlefevre68.github.io/pptpalette/assets/icon-80.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://mlefevre68.github.io/powerpoint-color-palette/index.html" />
-        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://github.com/mlefevre68/powerpoint-color-palette" />
+        <bt:Url id="Taskpane.Url" DefaultValue="https://mlefevre68.github.io/pptpalette/index.html" />
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://github.com/mlefevre68/pptpalette" />
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="CmdGroup.Label" DefaultValue="Colour" />
