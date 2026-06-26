@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Color Palette</title>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <link rel="stylesheet" href="taskpane.css" />
+</head>
+<body>
+  <div id="app">
+    <div class="modes">
+      <button class="mode" id="mFONT">Font</button>
+      <button class="mode" id="mFILL">Fill</button>
+      <button class="mode" id="mLINE">Outline</button>
+    </div>
+
+    <div id="status" class="status">Loading…</div>
+
+    <div class="section-label">Palette</div>
+    <div id="themeRow" class="swatch-grid"></div>
+
+    <div class="section-label">Standard</div>
+    <div id="standardRow" class="swatch-grid"></div>
+
+    <button id="noneBtn" class="none-btn">Transparent / No Fill / No Line</button>
+
+    <div class="section-label">Custom</div>
+    <div class="hex-row">
+      <input id="hexInput" type="text" placeholder="#RRGGBB" maxlength="7" />
+      <button id="hexSet" title="Apply">Set</button>
+      <button id="hexAdd" title="Save as swatch">+</button>
+    </div>
+    <div id="customRow" class="swatch-grid"></div>
+  </div>
+  <script src="taskpane.js"></script>
+</body>
+</html>

@@ -1,8 +1,17 @@
 # PowerPoint Color Palette
 
-A small, think-cell-style floating colour palette for **PowerPoint on Windows**, written in VBA.
+A small, think-cell-style floating colour palette for PowerPoint.
 Pick a mode — **Font / Fill / Outline** — then click a swatch to apply that colour to the
-selected shape(s) or text. The swatches are read **live from the open presentation's theme**,
+selected shape(s) or text.
+
+**Two versions are included:**
+- **VBA add-in** (`src/`, Windows only) — reads the open deck's **live theme colours**. See below.
+- **Office.js add-in** (`docs/` + `manifest.xml`, **Mac + Windows + web**) — a fixed/editable
+  palette instead of live theme colours. See [`SETUP_ADDIN.md`](SETUP_ADDIN.md).
+
+---
+
+The VBA version's swatches are read **live from the open presentation's theme**,
 so they always match the deck you're working in.
 
 ![mode: font / fill / outline · live theme swatches · transparent · custom hex](https://img.shields.io/badge/PowerPoint-VBA%20add--in-orange)
